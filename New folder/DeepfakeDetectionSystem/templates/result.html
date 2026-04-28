@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detection Result</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container result-container">
+        <header>
+            <h1>Detection Result</h1>
+        </header>
+
+        <div class="result-content">
+            <div class="image-preview">
+                <img src="{{ url_for('static', filename='uploads/' + filename) }}" alt="Analyzed Image">
+            </div>
+
+            <div class="analysis-details">
+                <div class="result-badge {{ label.lower() }}">
+                    {{ label }}
+                </div>
+                
+                <div class="confidence-section">
+                    <h3>Confidence</h3>
+                    <div class="progress-bar">
+                        <div class="progress-fill {{ label.lower() }}" style="width: {{ confidence }}%;"></div>
+                    </div>
+                    <p class="confidence-text">{{ confidence }}%</p>
+                </div>
+
+                <div class="tech-details">
+                    <div class="detail-item">
+                        <span class="label">File Hash (SHA-256):</span>
+                        <span class="value hash">{{ file_hash }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="label">Blockchain Block Hash:</span>
+                        <span class="value hash">{{ block_hash }}</span>
+                    </div>
+                    {% if s3_url %}
+                    <div class="detail-item">
+                        <span class="label">AWS S3 URL:</span>
+                        <span class="value"><a href="{{ s3_url }}" target="_blank" class="s3-link">View in Cloud</a></span>
+                    </div>
+                    {% else %}
+                    <div class="detail-item error">
+                        <span class="label">AWS S3 URL:</span>
+                        <span class="value">Upload Failed. Check AWS Credentials.</span>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <a href="{{ url_for('index') }}" class="btn-back">Analyze Another Image</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
